@@ -1,6 +1,6 @@
 <?php
 $koneksi = mysqli_connect("localhost", "root", "", "ukk2025_todolist");
-$limit = 5; 
+$limit = 5;
 $halaman = isset($_GET['halaman']) ? (int)$_GET['halaman'] : 1;
 $mulai = ($halaman - 1) * $limit;
 $total_data_query = mysqli_query($koneksi, "SELECT COUNT(*) AS total FROM task");
@@ -84,6 +84,7 @@ $total_halaman = ceil($total_data / $limit);
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -92,6 +93,7 @@ $total_halaman = ceil($total_data / $limit);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link href="style.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="container">
         <h2>To Do List</h2>
@@ -218,7 +220,8 @@ $total_halaman = ceil($total_data / $limit);
                                                 <option value="3" <?php echo ($row['priority'] == 3) ? 'selected' : ''; ?>>High</option>
                                             </select>
                                             <label class="form-label mt-2">Tanggal</label>
-                                            <input type="date" name="due_date" class="form-control" value="<?php echo $row['due_date']; ?>" min="<?php echo date('Y-m-d'); ?>" disabled>
+                                            <input type="date" name="due_date" class="form-control" value="<?php echo $row['due_date']; ?>" min="<?php echo date('Y-m-d'); ?>" required>
+
                                             <button class="btn btn-primary w-100 mt-3" name="edit_task">Simpan Perubahan</button>
                                         </form>
                                     </div>
@@ -231,32 +234,32 @@ $total_halaman = ceil($total_data / $limit);
         </table>
         <nav>
             <ul class="pagination justify-content-center">
-                <?php
-                if ($halaman > 1) { ?>
+                <?php if ($halaman > 1) { ?>
                     <li class="page-item">
-                        <a class="page-link" href="?halaman=<?php echo $halaman - 1; ?>&search=<?php echo $search; ?>&priority=<?php echo $priority_filter; ?>&due_date=<?php echo $date_filter; ?>&status=<?php echo $status_filter; ?>">
+                        <a class="page-link" href="?halaman=<?php echo $halaman - 1; ?>&search=<?php echo urlencode($search); ?>&priority=<?php echo $priority_filter; ?>&status=<?php echo $status_filter; ?>">
                             Previous
                         </a>
                     </li>
                 <?php } ?>
-                <?php
-                for ($i = 1; $i <= $total_halaman; $i++) { ?>
+
+                <?php for ($i = 1; $i <= $total_halaman; $i++) { ?>
                     <li class="page-item <?php echo ($halaman == $i) ? 'active' : ''; ?>">
-                        <a class="page-link" href="?halaman=<?php echo $i; ?>&search=<?php echo $search; ?>&priority=<?php echo $priority_filter; ?>&due_date=<?php echo $date_filter; ?>&status=<?php echo $status_filter; ?>">
+                        <a class="page-link" href="?halaman=<?php echo $i; ?>&search=<?php echo urlencode($search); ?>&priority=<?php echo $priority_filter; ?>&status=<?php echo $status_filter; ?>">
                             <?php echo $i; ?>
                         </a>
                     </li>
                 <?php } ?>
-                <?php
-                if ($halaman < $total_halaman) { ?>
+
+                <?php if ($halaman < $total_halaman) { ?>
                     <li class="page-item">
-                        <a class="page-link" href="?halaman=<?php echo $halaman + 1; ?>&search=<?php echo $search; ?>&priority=<?php echo $priority_filter; ?>&due_date=<?php echo $date_filter; ?>&status=<?php echo $status_filter; ?>">
+                        <a class="page-link" href="?halaman=<?php echo $halaman + 1; ?>&search=<?php echo urlencode($search); ?>&priority=<?php echo $priority_filter; ?>&status=<?php echo $status_filter; ?>">
                             Next
                         </a>
                     </li>
                 <?php } ?>
             </ul>
         </nav>
+
     </div>
     <script>
         function toggleFilter() {
@@ -270,4 +273,5 @@ $total_halaman = ceil($total_data / $limit);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
